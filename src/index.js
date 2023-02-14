@@ -5,22 +5,26 @@ import reducer from './redux/reducer';
 import { inc, dec, random } from './redux/action';
 
 const store = createStore(reducer);
-const { dispatch } = store;
+const { dispatch, getState, subscribe } = store;
 const update = () => {
-  document.getElementById('counter').textContent = store.getState().value;
+  document.getElementById('counter').textContent = getState().value;
 };
 
-store.subscribe(update);
+subscribe(update);
+
+const incHandler = () => dispatch(inc());
+const decHandler = () => dispatch(dec());
+const randomHandler = (num) => dispatch(random(num));
 
 document.getElementById('increment').addEventListener('click', () => {
-  dispatch(inc());
+  incHandler();
 });
 document.getElementById('decrement').addEventListener('click', () => {
-  dispatch(dec());
+  decHandler();
 });
 document.getElementById('random').addEventListener('click', () => {
   const randomValue = Math.floor(Math.random() * 10);
-  dispatch(random(randomValue));
+  randomHandler(randomValue);
 });
 
 store.dispatch({ type: 'INCREMENT' });
