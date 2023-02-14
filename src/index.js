@@ -1,8 +1,8 @@
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { createStore } from 'redux';
+import { createStore, bindActionCreators } from 'redux';
 import reducer from './redux/reducer';
-import { inc, dec, random } from './redux/action';
+import * as actions from './redux/action';
 
 const store = createStore(reducer);
 const { dispatch, getState, subscribe } = store;
@@ -12,19 +12,13 @@ const update = () => {
 
 subscribe(update);
 
-const incHandler = () => dispatch(inc());
-const decHandler = () => dispatch(dec());
-const randomHandler = (num) => dispatch(random(num));
+const { inc, dec, random } = bindActionCreators(actions, dispatch);
 
-document.getElementById('increment').addEventListener('click', () => {
-  incHandler();
-});
-document.getElementById('decrement').addEventListener('click', () => {
-  decHandler();
-});
+document.getElementById('increment').addEventListener('click', inc);
+document.getElementById('decrement').addEventListener('click', dec);
 document.getElementById('random').addEventListener('click', () => {
   const randomValue = Math.floor(Math.random() * 10);
-  randomHandler(randomValue);
+  random(randomValue);
 });
 
 store.dispatch({ type: 'INCREMENT' });
